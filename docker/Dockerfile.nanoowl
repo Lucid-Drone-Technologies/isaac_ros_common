@@ -3,8 +3,8 @@ FROM ${BASE_IMAGE}
 
 RUN mkdir -p /nano_packages/
 RUN mkdir -p /nano_workspace/src
-# ROS2-NanoOWL-master
 
+# ROS2-NanoOWL-master
 RUN cd /nano_workspace/src && \
     wget https://github.com/NVIDIA-AI-IOT/ROS2-NanoOWL/archive/refs/heads/master.zip -O ros2_nanoowl.zip && \
     unzip ros2_nanoowl.zip && \
@@ -49,12 +49,7 @@ RUN cd /nano_packages/nanoowl-main && \
 RUN cd /nano_packages/nanoowl-main && \
     python3 -m nanoowl.build_image_encoder_engine data/owl_image_encoder_patch32.engine
 
-RUN cd /nano_workspace/src && \ 
+RUN cd /nano_workspace && \ 
     colcon build
-    # echo "source /nano_workspace/src/install/setup.bash"
 
-# RUN cp -r /workspaces/isaac_ros-dev/nanoowl-main/data/ /workspaces/isaac_ros-dev/ROS2-NanoOWL/ 
-
-
-
-
+RUN cp -r /nano_packages/nanoowl-main/data/ /nano_workspace/ROS2-NanoOWL/ 
