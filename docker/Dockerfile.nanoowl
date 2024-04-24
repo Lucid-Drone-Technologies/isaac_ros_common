@@ -1,0 +1,60 @@
+ARG BASE_IMAGE
+FROM ${BASE_IMAGE}
+
+RUN mkdir -p /nano_packages/
+RUN mkdir -p /nano_workspace/src
+# ROS2-NanoOWL-master
+
+RUN cd /nano_workspace/src && \
+    wget https://github.com/NVIDIA-AI-IOT/ROS2-NanoOWL/archive/refs/heads/master.zip -O ros2_nanoowl.zip && \
+    unzip ros2_nanoowl.zip && \
+    rm ros2_nanoowl.zip
+
+# nanoowl-main
+RUN cd /nano_packages/ && \
+    wget https://github.com/NVIDIA-AI-IOT/nanoowl/archive/refs/heads/main.zip -O nanoowl.zip && \
+    unzip nanoowl.zip && \
+    rm nanoowl.zip
+
+# # torch2trt-master
+RUN cd /nano_packages/ && \
+    wget https://github.com/NVIDIA-AI-IOT/torch2trt/archive/refs/heads/master.zip -O torch2trt.zip && \
+    unzip torch2trt.zip && \
+    rm torch2trt.zip
+
+# # demos-humble 
+RUN cd /nano_packages/ && \
+    wget https://github.com/ros2/demos/archive/refs/heads/humble.zip -O ros2_demos.zip && \
+    unzip ros2_demos.zip && \
+    rm ros2_demos.zip
+
+RUN pip install transformers matplotlib ninja pycuda
+
+RUN apt-get update && apt-get install -y \
+    nvidia-cuda-dev \
+    python3-libnvinfer-dev \
+    apt-utils \
+    ninja-build \
+    ros-humble-isaac-ros-visual-slam \
+    && rm -rf /var/lib/apt/lists/* \
+    && apt-get clean
+
+RUN cd /nano_packages/torch2trt-master && \
+    python setup.py install
+
+RUN cd /nano_packages/nanoowl-main && \
+    python setup.py install && \
+    mkdir -p data 
+
+RUN cd /nano_packages/nanoowl-main && \
+    python3 -m nanoowl.build_image_encoder_engine data/owl_image_encoder_patch32.engine
+
+RUN cd /nano_workspace/src && \ 
+    colcon build
+    # echo "source /nano_workspace/src/install/setup.bash"
+
+# RUN cp -r /workspaces/isaac_ros-dev/nanoowl-main/data/ /workspaces/isaac_ros-dev/ROS2-NanoOWL/ 
+
+
+
+
