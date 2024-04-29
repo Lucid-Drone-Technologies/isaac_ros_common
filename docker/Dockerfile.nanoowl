@@ -22,42 +22,59 @@ RUN cd /nano_packages/ && \
     unzip torch2trt.zip && \
     rm torch2trt.zip
 
-# # demos-humble 
-RUN cd /nano_packages/ && \
-    wget https://github.com/ros2/demos/archive/refs/heads/humble.zip -O ros2_demos.zip && \
-    unzip ros2_demos.zip && \
-    rm ros2_demos.zip
-
-RUN pip install transformers matplotlib ninja pycuda
-
 RUN apt-get update && apt-get install -y \
+    python3.8-dev \
+    build-essential \
     nvidia-cuda-dev \
     python3-libnvinfer-dev \
+    tensorrt \
     apt-utils \
     ninja-build \
     ros-humble-isaac-ros-visual-slam \
     && rm -rf /var/lib/apt/lists/* \
     && apt-get clean
     
+RUN python3.8 -m pip install -U pip   
+RUN pip3 install setuptools --upgrade
+RUN pip3 install pillow --upgrade
+RUN pip3 install numpy --upgrade
+
+RUN wget https://developer.download.nvidia.com/compute/redist/jp/v512/pytorch/torch-2.1.0a0+41361538.nv23.06-cp38-cp38-linux_aarch64.whl -O torch-2.1.0a0+41361538.nv23.06-cp38-cp38-linux_aarch64.whl && \
+    apt-get update && apt-get install -y libopenblas-base libopenmpi-dev && \
+    python3 -m pip install -U torch-2.1.0a0+41361538.nv23.06-cp38-cp38-linux_aarch64.whl onnx
+
+
 RUN cd /nano_packages/ && \
-    wget https://github.com/pytorch/vision/archive/refs/heads/release/0.13.zip -O torchvision.zip && \
+    wget https://github.com/pytorch/vision/archive/refs/heads/release/0.16.zip -O torchvision.zip && \
     unzip torchvision.zip && \
     rm torchvision.zip
 
-RUN cd /nano_packages/vision-release-0.13 && \
+RUN cd /nano_packages/vision-release-0.16 && \
     pip install .
 
 RUN cd /nano_packages/torch2trt-master && \
-    pip install .
+    cmake -B build . && cmake --build build --target install && ldconfig
+
+RUN pip install transformers
 
 RUN cd /nano_packages/nanoowl-main && \
     pip install . && \
     mkdir -p data 
 
+ARG USERNAME=admin
+ARG USER_UID=1000
+ARG USER_GID=1000
+ENV USERNAME=${USERNAME}
+ENV USER_GID=${USER_GID}
+ENV USER_UID=${USER_UID}
+USER ${USERNAME}
+
 RUN cd /nano_packages/nanoowl-main && \
-    python3 -m nanoowl.build_image_encoder_engine data/owl_image_encoder_patch32.engine
+    sudo python3 -m nanoowl.build_image_encoder_engine data/owl_image_encoder_patch32.engine
 
 RUN cd /nano_workspace && \ 
     colcon build
 
 RUN cp -r /nano_packages/nanoowl-main/data/ /nano_workspace/ROS2-NanoOWL/ 
+
+USER root
