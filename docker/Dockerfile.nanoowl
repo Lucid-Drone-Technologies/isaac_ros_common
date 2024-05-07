@@ -67,4 +67,4 @@ RUN cd /nano_packages/nanoowl-main && \
 RUN cd /nano_workspace && \ 
     colcon build
 
-RUN cp -r /nano_packages/nanoowl-main/data/ /nano_workspace/ROS2-NanoOWL/ 
+RUN cp -r /nano_packages/nanoowl-main/data/ /nano_workspace/src/ROS2-NanoOWL/ 
