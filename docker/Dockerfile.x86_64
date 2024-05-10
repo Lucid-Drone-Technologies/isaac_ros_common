@@ -12,7 +12,7 @@
 # https://catalog.ngc.nvidia.com/orgs/nvidia/containers/isaac-sim
 ARG BASE_DIST=ubuntu20.04
 ARG CUDA_VERSION=11.4.2
-ARG ISAACSIM_VERSION=2023.1.0
+ARG ISAACSIM_VERSION=2023.1.1
 
 FROM nvcr.io/nvidia/isaac-sim:${ISAACSIM_VERSION} as isaac-sim
 
@@ -93,6 +93,13 @@ COPY --from=isaac-sim /etc/vulkan/icd.d/nvidia_icd.json /etc/vulkan/implicit_lay
 
 # Add symlink
 RUN ln -s exts/omni.isaac.examples/omni/isaac/examples extension_examples
+
+RUN apt-key del 7fa2af80 && mkdir -p /tmp && cd /tmp \
+        && wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/cuda-keyring_1.0-1_all.deb \
+        && dpkg -i cuda-keyring_1.0-1_all.deb \
+        && rm cuda-keyring_1.0-1_all.deb \
+        && add-apt-repository --remove 'deb https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/ /'
+
 
 # Add Isaac apt repository
 # RUN wget -qO - https://isaac.download.nvidia.com/isaac-ros/repos.key | apt-key add -

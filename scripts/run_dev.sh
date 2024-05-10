@@ -157,8 +157,6 @@ DOCKER_ARGS+=("-v ~/docker/isaac-sim/data:/root/.local/share/ov/data:rw")
 DOCKER_ARGS+=("-v ~/docker/isaac-sim/documents:/root/Documents:rw")
 DOCKER_ARGS+=("-e DISPLAY")
 DOCKER_ARGS+=("-e NVIDIA_VISIBLE_DEVICES=all")
-DOCKER_ARGS+=("-e PRIVACY_CONSENT=Y")
-DOCKER_ARGS+=("-e ACCEPT_EULA=Y")
 DOCKER_ARGS+=("-e NVIDIA_DRIVER_CAPABILITIES=all")
 DOCKER_ARGS+=("-e FASTRTPS_DEFAULT_PROFILES_FILE=/usr/local/share/middleware_profiles/rtps_udp_profile.xml")
 DOCKER_ARGS+=("-e ROS_DOMAIN_ID")
@@ -210,7 +208,9 @@ docker run -it --rm \
     -v /dev/*:/dev/* \
     -v /etc/localtime:/etc/localtime:ro \
     --name "$CONTAINER_NAME" \
-    --runtime nvidia \
+    --gpus all \
+    -e "ACCEPT_EULA=Y" \
+    -e "PRIVACY_CONSENT=Y" \
     --user="admin" \
     --entrypoint /usr/local/bin/scripts/workspace-entrypoint.sh \
     --workdir /workspaces/isaac_ros-dev \
