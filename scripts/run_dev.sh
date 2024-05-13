@@ -155,12 +155,10 @@ DOCKER_ARGS+=("-v $HOME/docker/isaac-sim/cache/computecache:/root/.nv/ComputeCac
 DOCKER_ARGS+=("-v $HOME/docker/isaac-sim/logs:/root/.nvidia-omniverse/logs:rw")
 DOCKER_ARGS+=("-v $HOME/docker/isaac-sim/data:/root/.local/share/ov/data:rw")
 DOCKER_ARGS+=("-v $HOME/docker/isaac-sim/documents:/root/Documents:rw")
-DOCKER_ARGS+=("-e DISPLAY")
 DOCKER_ARGS+=("-e NVIDIA_VISIBLE_DEVICES=all")
-DOCKER_ARGS+=("-e NVIDIA_DRIVER_CAPABILITIES=all")
-DOCKER_ARGS+=("-e FASTRTPS_DEFAULT_PROFILES_FILE=/usr/local/share/middleware_profiles/rtps_udp_profile.xml")
-DOCKER_ARGS+=("-e ROS_DOMAIN_ID")
-DOCKER_ARGS+=("-e USER")
+DOCKER_ARGS+=("-e ROS_DISTRO=humble")
+DOCKER_ARGS+=("-e RMW_IMPLEMENTATION=rmw_fastrtps_cpp")
+DOCKER_ARGS+=("-e FASTRTPS_DEFAULT_PROFILES_FILE=/.ros/fastdds.xml")
 
 if [[ $PLATFORM == "aarch64" ]]; then
     DOCKER_ARGS+=("-v /usr/bin/tegrastats:/usr/bin/tegrastats")

@@ -9,14 +9,14 @@
 # license agreement from NVIDIA CORPORATION is strictly prohibited.
 
 # Build ROS dependency
-echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> ~/.bashrc
-source /opt/ros/${ROS_DISTRO}/setup.bash
+echo "source ~/ros2_humble/install/setup.bash" >> ~/.bashrc
+source ~/ros2_humble/install/setup.bash
 
-echo "source /workspaces/isaac_ros-dev/install/setup.bash" >> ~/.bashrc
-source /workspaces/isaac_ros-dev/install/setup.bash
+#echo "source /workspaces/isaac_ros-dev/install/setup.bash" >> ~/.bashrc
+#source /workspaces/isaac_ros-dev/install/setup.bash
 
 sudo apt-get update
-rosdep update
+#rosdep update
 
 # Restart udev daemon
 sudo service udev restart
