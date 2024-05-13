@@ -33,16 +33,16 @@ RUN apt-get update && \
 		gnupg2 \
 		lsb-release
 
-RUN apt update && apt upgrade -y && apt clean
+RUN apt-get update && apt-get upgrade -y && apt-get clean
 
-RUN apt update && \
-    apt install --no-install-recommends -y build-essential software-properties-common && \
+RUN apt-get update && \
+    apt-get install --no-install-recommends -y build-essential software-properties-common && \
     add-apt-repository -y ppa:deadsnakes/ppa && \
     apt install --no-install-recommends -y python3.10 python3.10-dev python3.10-distutils \
     && rm -rf /var/lib/apt/lists/* \
     && apt-get clean
 
-RUN apt update && apt install locales
+RUN apt-get update && apt-get install locales
 
 RUN locale-gen en_US en_US.UTF-8 && \
     update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 && \
@@ -53,16 +53,18 @@ python3.10 get-pip.py --force-reinstall && \
 rm get-pip.py
 
 
-RUN apt update && \
-    apt install -y build-essential software-properties-common && \
+RUN apt-get update && \
+    apt-get install -y build-essential software-properties-common && \
     add-apt-repository universe \
     && rm -rf /var/lib/apt/lists/* \
     && apt-get clean
 
+RUN curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
+
 
 RUN echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(. /etc/os-release && echo $UBUNTU_CODENAME) main" | tee /etc/apt/sources.list.d/ros2.list > /dev/null
 
-RUN apt update && apt install -y \
+RUN apt-get update && apt-get install -y \
     python3-flake8-docstrings \
     python3-pip \
     python3-pytest-cov \
@@ -84,7 +86,7 @@ RUN mkdir -p ~/ros2_humble/src && cd ~/ros2_humble/src && \
     vcs import --input https://raw.githubusercontent.com/ros2/ros2/humble/ros2.repos src
 
 
-RUN apt update && apt upgrade -y && apt clean
+RUN apt-get update && apt-get upgrade -y && apt-get clean
 
 
 RUN rosdep init && rosdep update && \
