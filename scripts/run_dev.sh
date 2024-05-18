@@ -156,9 +156,6 @@ DOCKER_ARGS+=("-v $HOME/docker/isaac-sim/logs:/root/.nvidia-omniverse/logs:rw")
 DOCKER_ARGS+=("-v $HOME/docker/isaac-sim/data:/root/.local/share/ov/data:rw")
 DOCKER_ARGS+=("-v $HOME/docker/isaac-sim/documents:/root/Documents:rw")
 DOCKER_ARGS+=("-e NVIDIA_VISIBLE_DEVICES=all")
-DOCKER_ARGS+=("-e ROS_DISTRO=humble")
-DOCKER_ARGS+=("-e RMW_IMPLEMENTATION=rmw_fastrtps_cpp")
-DOCKER_ARGS+=("-e FASTRTPS_DEFAULT_PROFILES_FILE=/.ros/fastdds.xml")
 
 if [[ $PLATFORM == "aarch64" ]]; then
     DOCKER_ARGS+=("-v /usr/bin/tegrastats:/usr/bin/tegrastats")
@@ -207,9 +204,8 @@ docker run -it --rm \
     -v /etc/localtime:/etc/localtime:ro \
     --name "$CONTAINER_NAME" \
     --gpus all \
-    -e "ACCEPT_EULA=Y" \
-    -e "PRIVACY_CONSENT=Y" \
     --user="admin" \
+    --runtime nvidia \
     --entrypoint /usr/local/bin/scripts/workspace-entrypoint.sh \
     --workdir /workspaces/isaac_ros-dev \
     $@ \
