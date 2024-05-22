@@ -147,15 +147,12 @@ fi
 # Map host's display socket to docker
 DOCKER_ARGS+=("-v /tmp/.X11-unix:/tmp/.X11-unix")
 DOCKER_ARGS+=("-v $HOME/.Xauthority:/home/admin/.Xauthority:rw")
-DOCKER_ARGS+=("-v $HOME/docker/isaac-sim/cache/ov:/root/.cache/ov:rw")
-DOCKER_ARGS+=("-v $HOME/docker/isaac-sim/cache/kit:/isaac-sim/kit/cache:rw")
-DOCKER_ARGS+=("-v $HOME/docker/isaac-sim/cache/pip:/root/.cache/pip:rw")
-DOCKER_ARGS+=("-v $HOME/docker/isaac-sim/cache/glcache:/root/.cache/nvidia/GLCache:rw")
-DOCKER_ARGS+=("-v $HOME/docker/isaac-sim/cache/computecache:/root/.nv/ComputeCache:rw ")
-DOCKER_ARGS+=("-v $HOME/docker/isaac-sim/logs:/root/.nvidia-omniverse/logs:rw")
-DOCKER_ARGS+=("-v $HOME/docker/isaac-sim/data:/root/.local/share/ov/data:rw")
-DOCKER_ARGS+=("-v $HOME/docker/isaac-sim/documents:/root/Documents:rw")
+DOCKER_ARGS+=("-e DISPLAY")
 DOCKER_ARGS+=("-e NVIDIA_VISIBLE_DEVICES=all")
+DOCKER_ARGS+=("-e NVIDIA_DRIVER_CAPABILITIES=all")
+DOCKER_ARGS+=("-e FASTRTPS_DEFAULT_PROFILES_FILE=/usr/local/share/middleware_profiles/rtps_udp_profile.xml")
+DOCKER_ARGS+=("-e ROS_DOMAIN_ID")
+DOCKER_ARGS+=("-e USER")
 
 if [[ $PLATFORM == "aarch64" ]]; then
     DOCKER_ARGS+=("-v /usr/bin/tegrastats:/usr/bin/tegrastats")
@@ -203,9 +200,9 @@ docker run -it --rm \
     -v /dev/*:/dev/* \
     -v /etc/localtime:/etc/localtime:ro \
     --name "$CONTAINER_NAME" \
-    --gpus all \
-    --user="admin" \
     --runtime nvidia \
+    -- gpus all \
+    --user="admin" \
     --entrypoint /usr/local/bin/scripts/workspace-entrypoint.sh \
     --workdir /workspaces/isaac_ros-dev \
     $@ \
