@@ -7,3 +7,8 @@
 # license agreement from NVIDIA CORPORATION is strictly prohibited.
 
 FROM nvcr.io/nvidia/isaac/ros:x86_64-ros2_humble_bcf535ea3b9d16a854aaeb1701ab5a86
+
+
+RUN apt-get update && apt-get install -y ros-humble-foxglove-bridge \
+&& rm -rf /var/lib/apt/lists/* \
+&& apt-get clean
