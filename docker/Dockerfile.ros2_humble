@@ -281,3 +281,58 @@ RUN sudo sed -i '917i #ifdef GTEST_INTERNAL_NEED_REDUNDANT_CONSTEXPR_DECL' /usr/
 
 # Store list of packages (must be last)
 RUN mkdir -p /opt/nvidia/isaac_ros_dev_base && dpkg-query -W | sort > /opt/nvidia/isaac_ros_dev_base/ros2_humble-end-packages.csv
+
+RUN apt-get update && apt-get install -y ros-humble-foxglove-bridge \
+    ros-humble-robot-localization \
+&& rm -rf /var/lib/apt/lists/* \
+&& apt-get clean
+
+RUN apt-get update && apt-get install -y ros-humble-gxf-isaac-atlas \
+    ros-humble-gxf-isaac-gems \
+    ros-humble-gxf-isaac-gxf-helpers \
+    ros-humble-gxf-isaac-image-flip \
+    ros-humble-gxf-isaac-message-compositor \ 
+    ros-humble-gxf-isaac-messages \
+    ros-humble-gxf-isaac-optimizer \
+    ros-humble-gxf-isaac-sight \
+    ros-humble-gxf-isaac-tensorops \
+    ros-humble-isaac-ros-gxf \
+    ros-humble-isaac-ros-h264-decoder \
+    ros-humble-isaac-ros-image-proc \
+    ros-humble-isaac-ros-managed-nitros \
+    ros-humble-isaac-ros-nitros \
+    ros-humble-isaac-ros-nitros-camera-info-type \
+    ros-humble-isaac-ros-nitros-compressed-image-type \
+    ros-humble-isaac-ros-nitros-image-type \
+    ros-humble-isaac-ros-nitros-interfaces \
+    ros-humble-isaac-ros-nitros-tensor-list-type \
+    ros-humble-isaac-ros-tensor-list-interfaces \
+    ros-humble-magic-enum \
+&& rm -rf /var/lib/apt/lists/* \
+&& apt-get clean
+
+
+RUN apt-get update && apt-get install -y ros-humble-custom-nitros-image \
+    ros-humble-gxf-isaac-fiducials \
+    ros-humble-isaac-ros-apriltag \
+    ros-humble-isaac-ros-apriltag-interfaces \
+    ros-humble-isaac-ros-nitros-april-tag-detection-array-type \
+    ros-humble-isaac-ros-vda5050-nav2-client-bringup \
+    ros-humble-nova-carter-docking \
+    ros-humble-nova-carter-navigation \
+    ros-humble-nvblox-msgs ros-humble-nvblox-nav2 \
+    ros-humble-opennav-docking-core \
+    ros-humble-opennav-docking-msgs \
+&& rm -rf /var/lib/apt/lists/* \
+&& apt-get clean
+
+RUN apt-get update && apt-get install -y ros-humble-gxf-isaac-localization \
+    ros-humble-isaac-ros-nitros-pose-cov-stamped-type \
+    ros-humble-gxf-isaac-flatscan-localization \
+    ros-humble-gxf-isaac-ros-messages \ 
+    ros-humble-isaac-ros-nitros-flat-scan-type \
+    ros-humble-gxf-isaac-utils \
+    ros-humble-isaac-ros-nitros-point-cloud-type \
+&& rm -rf /var/lib/apt/lists/* \
+&& apt-get clean
+
