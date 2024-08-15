@@ -1,0 +1,2 @@
+CONFIG_IMAGE_KEY=ros2_humble.nova_developer_kit
+CONFIG_DOCKER_SEARCH_DIRS=(../../nova_developer_kit/docker ../docker)
