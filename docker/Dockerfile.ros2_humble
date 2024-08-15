@@ -361,5 +361,6 @@ RUN apt-get update && apt-get install -y ros-humble-isaac-ros-ess-models-install
 	ros-humble-isaac-ros-bi3d-freespace \
 	ros-humble-isaac-ros-correlated-timestamp-driver \
 	ros-humble-isaac-ros-nitros-imu-type \
+	ros-humble-topic-tools \
 && rm -rf /var/lib/apt/lists/* \
 && apt-get clean
