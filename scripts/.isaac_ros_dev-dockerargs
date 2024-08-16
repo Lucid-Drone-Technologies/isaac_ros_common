@@ -1,1 +1,2 @@
 -v /etc/nova/:/etc/nova/
+-v /mnt/nova_ssd/recordings:/mnt/nova_ssd/recordings
