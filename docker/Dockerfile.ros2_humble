@@ -123,7 +123,9 @@ apt-get update && apt-get install -y \
     ros-humble-v4l2-camera \
     ros-humble-vision-opencv \
     ros-humble-vision-msgs \
-    ros-humble-vision-msgs-rviz-plugins
+    ros-humble-vision-msgs-rviz-plugins 
+
+
 
 # Setup rosdep
 COPY rosdep/extra_rosdeps.yaml /etc/ros/rosdep/sources.list.d/nvidia-isaac.yaml
@@ -333,6 +335,10 @@ RUN apt-get update && apt-get install -y ros-humble-custom-nitros-image \
     ros-humble-gxf-isaac-bmi088-imu \
     ros-humble-gxf-isaac-hesai \
     ros-humble-gxf-isaac-range-scan-processing \
+    ros-humble-isaac-ros-data-validation \
+    ros-humble-isaac-ros-hawk \
+    ros-humble-isaac-ros-owl \
+    ros-humble-nova-carter-description \
     ros-humble-hesai-ros-driver \
     ros-humble-isaac-ros-argus-camera \
     ros-humble-gxf-isaac-argus\

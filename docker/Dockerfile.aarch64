@@ -45,6 +45,7 @@ apt-get update && apt-get install -y \
     tar \
     unzip \
     vim \
+    nano \
     wget \
     zlib1g-dev
 
