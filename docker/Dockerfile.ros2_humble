@@ -125,8 +125,6 @@ apt-get update && apt-get install -y \
     ros-humble-vision-msgs \
     ros-humble-vision-msgs-rviz-plugins 
 
-
-
 # Setup rosdep
 COPY rosdep/extra_rosdeps.yaml /etc/ros/rosdep/sources.list.d/nvidia-isaac.yaml
 RUN --mount=type=cache,target=/var/cache/apt \
@@ -219,7 +217,19 @@ apt-get update && apt-get install -y \
     ros-humble-ur-description \
     ros-humble-ur-moveit-config \
     ros-humble-ur-msgs \
-    ros-humble-xacro
+    ros-humble-xacro \
+    ros-humble-rqt-topic \
+    ros-humble-rqt-plot \
+    ros-humble-rqt-msg \
+    ros-humble-rqt-runtime-monitor \
+    ros-humble-rqt-robot-monitor \
+    ros-humble-rqt-robot-dashboard \
+    ros-humble-rqt-robot-steering \
+    ros-humble-rqt-publisher \
+    ros-humble-rqt-common-plugins \
+    ros-humble-rqt-srv 
+
+
 
 # Install various moveit_resources packages from source.
 RUN --mount=type=cache,target=/var/cache/apt \
