@@ -227,7 +227,8 @@ apt-get update && apt-get install -y \
     ros-humble-rqt-robot-steering \
     ros-humble-rqt-publisher \
     ros-humble-rqt-common-plugins \
-    ros-humble-rqt-srv 
+    ros-humble-rqt-srv \
+    ros-humble-teleop-tools
 
 
 

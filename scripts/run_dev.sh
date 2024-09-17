@@ -242,6 +242,7 @@ if [[ $PLATFORM == "aarch64" ]]; then
     DOCKER_ARGS+=("--pid=host")
     DOCKER_ARGS+=("-v /usr/share/vpi3:/usr/share/vpi3")
     DOCKER_ARGS+=("-v /dev/input:/dev/input")
+    DOCKER_ARGS+=("-device /dev/ttyACM0:/dev/ttyACM0")
 
     # If jtop present, give the container access
     if [[ $(getent group jtop) ]]; then
