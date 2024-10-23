@@ -51,7 +51,14 @@ apt-get update && apt-get install -y \
         python3-rosdep \
         python3-rosinstall-generator \
         python3-vcstool \
-        quilt
+        quilt \
+        vim \
+        nano \
+        libavdevice-dev \
+        libavformat-dev \
+        libavcodec-dev \
+        libavutil-dev \
+        libswscale-dev
 
 # ROS Python fundamentals
 RUN python3 -m pip install -U \
