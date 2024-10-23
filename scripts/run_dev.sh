@@ -94,7 +94,7 @@ ON_EXIT+=("popd")
 
 # Fall back if isaac_ros_dev_dir not specified
 if [[ -z "$ISAAC_ROS_DEV_DIR" ]]; then
-    ISAAC_ROS_DEV_DIR_DEFAULTS=("$HOME/workspaces/isaac_ros-dev" "/workspaces/isaac_ros-dev" "/mnt/nova_ssd/workspaces/isaac_ros-dev")
+    ISAAC_ROS_DEV_DIR_DEFAULTS=("$HOME/nano_ws/isaac_ros-dev" "/nano_ws/isaac_ros-dev" "/mnt/nova_ssd/nano_ws/isaac_ros-dev")
     for ISAAC_ROS_DEV_DIR in "${ISAAC_ROS_DEV_DIR_DEFAULTS[@]}"
     do
         if [[ -d "$ISAAC_ROS_DEV_DIR" ]]; then
@@ -194,7 +194,7 @@ fi
 # Re-use existing container.
 if [ "$(docker ps -a --quiet --filter status=running --filter name=$CONTAINER_NAME)" ]; then
     print_info "Attaching to running container: $CONTAINER_NAME"
-    docker exec -i -t -u admin --workdir /workspaces/isaac_ros-dev $CONTAINER_NAME /bin/bash $@
+    docker exec -i -t -u admin --workdir /nano_ws/isaac_ros-dev $CONTAINER_NAME /bin/bash $@
     exit 0
 fi
 
@@ -232,7 +232,7 @@ DOCKER_ARGS+=("-e NVIDIA_DRIVER_CAPABILITIES=all")
 DOCKER_ARGS+=("-e FASTRTPS_DEFAULT_PROFILES_FILE=/usr/local/share/middleware_profiles/rtps_udp_profile.xml")
 DOCKER_ARGS+=("-e ROS_DOMAIN_ID")
 DOCKER_ARGS+=("-e USER")
-DOCKER_ARGS+=("-e ISAAC_ROS_WS=/workspaces/isaac_ros-dev")
+DOCKER_ARGS+=("-e ISAAC_ROS_WS=/nano_ws/isaac_ros-dev")
 
 if [[ $PLATFORM == "aarch64" ]]; then
     DOCKER_ARGS+=("-v /usr/bin/tegrastats:/usr/bin/tegrastats")
@@ -280,12 +280,12 @@ docker run -it --rm \
     --privileged \
     --network host \
     ${DOCKER_ARGS[@]} \
-    -v $ISAAC_ROS_DEV_DIR:/workspaces/isaac_ros-dev \
+    -v $ISAAC_ROS_DEV_DIR:/nano_ws/isaac_ros-dev \
     -v /etc/localtime:/etc/localtime:ro \
     --name "$CONTAINER_NAME" \
     --runtime nvidia \
     --user="admin" \
     --entrypoint /usr/local/bin/scripts/workspace-entrypoint.sh \
-    --workdir /workspaces/isaac_ros-dev \
+    --workdir /nano_ws/isaac_ros-dev \
     $BASE_NAME \
     /bin/bash

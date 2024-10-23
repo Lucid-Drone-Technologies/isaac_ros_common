@@ -129,7 +129,7 @@ if [[ ! -z "${ROS_WS}" ]]; then
     fi
 
     # Resolve ROS_WS_DEST from install directory setup.sh
-    ROS_WS_DEST=/workspaces/isaac_ros-dev
+    ROS_WS_DEST=/nano_ws/isaac_ros-dev
     FILE_CONTENT=$(< "${ROS_WS}/install/setup.sh")
     REGEX="_colcon_prefix_chain_sh_COLCON_CURRENT_PREFIX=([^[:space:]]*)"
     if [[ $FILE_CONTENT =~ $REGEX ]]; then
