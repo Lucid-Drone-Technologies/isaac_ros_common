@@ -219,6 +219,26 @@ apt-get update && apt-get install -y \
     ros-humble-ur-msgs \
     ros-humble-xacro
 
+RUN --mount=type=cache,target=/var/cache/apt \
+apt-get update && apt-get install -y \
+    ros-humble-isaac-ros-common \
+    ros-humble-isaac-ros-image-proc \
+    ros-humble-isaac-ros-test \
+    ros-humble-isaac-ros-h264-decoder \
+    ros-humble-isaac-ros-peoplesemseg-models-install \
+    ros-humble-nova-carter-navigation \
+    ros-humble-isaac-ros-pointcloud-interfaces \
+    ros-humble-isaac-ros-nitros-flat-scan-type \
+    ros-humble-isaac-ros-nitros-point-cloud-type \
+    ros-humble-gxf-isaac-point-cloud \
+    ros-humble-isaac-ros-nitros-pose-cov-stamped-type \
+    ros-humble-gxf-isaac-utils \
+    ros-humble-gxf-isaac-cuda \
+    ros-humble-gxf-isaac-flatscan-localization \
+    ros-humble-gxf-isaac-localization \
+    ros-humble-gxf-isaac-ros-cuda \
+    ros-humble-robot-localization
+
 # Install various moveit_resources packages from source.
 RUN --mount=type=cache,target=/var/cache/apt \
     mkdir -p ${ROS_ROOT}/src && cd ${ROS_ROOT}/src \
