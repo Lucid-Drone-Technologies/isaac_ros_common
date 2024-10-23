@@ -12,6 +12,13 @@
 echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> ~/.bashrc
 source /opt/ros/${ROS_DISTRO}/setup.bash
 
+echo "source /nano_ws/isaac_ros-dev/install/setup.bash" >> ~/.bashrc
+source /nano_ws/isaac_ros-dev/install/setup.bash
+
+echo "source /nano_ws/isaac_ros-dev/install/local_setup.bash" >> ~/.bashrc
+source /nano_ws/isaac_ros-dev/install/local_setup.bash
+
+
 # Restart udev daemon
 sudo service udev restart
 
