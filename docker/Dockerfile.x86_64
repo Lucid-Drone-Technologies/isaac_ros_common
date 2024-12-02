@@ -118,7 +118,12 @@ RUN python3 -m pip install -U \
         warp-lang>=0.9.0 \
         scipy>=1.7.0 \
         tqdm \
-        importlib_resources
+        importlib_resources \
+	libavdevice-dev \
+    	libavformat-dev \
+    	libavcodec-dev \
+    	libavutil-dev \
+    	libswscale-dev
 
 # Install nvv4l2 for GXF Multimedia h264 codec
 RUN --mount=type=cache,target=/var/cache/apt \
