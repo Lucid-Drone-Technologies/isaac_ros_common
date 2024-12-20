@@ -312,6 +312,50 @@ RUN if [ "$TARGETPLATFORM" = "linux/amd64" ]; then \
         exit -1; \
     fi
 
+# installing additional ubuntu packages
+RUN --mount=type=cache,target=/var/cache/apt \
+    apt-get update && apt-get install -y \
+    libavdevice-dev \
+    libavformat-dev \
+    libavcodec-dev \
+    libavutil-dev \
+    libswscale-dev
+
+# installing additional ROS packages
+RUN --mount=type=cache,target=/var/cache/apt \
+    apt-get update && apt-get install -y \
+    ros-humble-rqt-topic \
+    ros-humble-rqt-plot \
+    ros-humble-rqt-msg \
+    ros-humble-rqt-runtime-monitor \
+    ros-humble-rqt-robot-monitor \
+    ros-humble-rqt-robot-dashboard \
+    ros-humble-rqt-robot-steering \
+    ros-humble-rqt-publisher \
+    ros-humble-rqt-common-plugins \
+    ros-humble-rqt-srv \
+    ros-humble-teleop-tools \
+    ros-humble-foxglove-msgs
+
+# installing additional Isaac ROS packages
+RUN --mount=type=cache,target=/var/cache/apt \
+    apt-get update && apt-get install -y \
+    ros-humble-isaac-ros-test \
+    ros-humble-isaac-common \
+    ros-humble-isaac-ros-visual-slam-interfaces \
+    ros-humble-isaac-ros-peoplenet-models-install \
+    ros-humble-isaac-ros-test-cmake \
+    ros-humble-isaac-ros-peoplesemseg-models-install \
+    ros-humble-gxf-isaac-ros-cuda \
+    ros-humble-gxf-isaac-localization \
+    ros-humble-gxf-isaac-flatscan-localization \
+    ros-humble-gxf-isaac-cuda \
+    ros-humble-gxf-isaac-utils \
+    ros-humble-isaac-ros-pointcloud-utils \
+    ros-humble-isaac-ros-nitros-flat-scan-type \
+    ros-humble-isaac-ros-nitros-pose-cov-stamped-type \
+    ros-humble-isaac-ros-pointcloud-interfaces
+
 # Install custom vcstool with --delay flag to be robust against
 # GitHub rate-limiting (nvbugs/4872446)
 RUN mkdir -p /opt/ros/humble && cd /opt/ros/humble \
