@@ -54,6 +54,12 @@ for addition in /usr/local/bin/scripts/entrypoint_additions/*.sh; do
   fi
 done
 
+echo "source /nano_ws/isaac_ros-dev/install/setup.bash" >> ~/.bashrc
+source /nano_ws/isaac_ros-dev/install/setup.bash
+
+echo "source /nano_ws/isaac_ros-dev/install/local_setup.bash" >> ~/.bashrc
+source /nano_ws/isaac_ros-dev/install/local_setup.bash
+
 # Restart udev daemon
 service udev restart
 
