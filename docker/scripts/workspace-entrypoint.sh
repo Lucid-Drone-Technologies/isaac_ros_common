@@ -10,57 +10,63 @@
 
 echo "Creating non-root container '${USERNAME}' for host user uid=${HOST_USER_UID}:gid=${HOST_USER_GID}"
 
-if [ ! $(getent group ${HOST_USER_GID}) ]; then
-  groupadd --gid ${HOST_USER_GID} ${USERNAME} &>/dev/null
+# Check if we are running as root
+if [ "$(id -u)" -eq 0 ]; then
+    if [ ! "$(getent group ${HOST_USER_GID})" ]; then
+        groupadd --gid ${HOST_USER_GID} ${USERNAME} &>/dev/null
+    else
+        CONFLICTING_GROUP_NAME=$(getent group ${HOST_USER_GID} | cut -d: -f1)
+        groupmod -o --gid ${HOST_USER_GID} -n ${USERNAME} ${CONFLICTING_GROUP_NAME}
+    fi
+
+    if [ ! "$(getent passwd ${HOST_USER_UID})" ]; then
+        useradd --no-log-init --uid ${HOST_USER_UID} --gid ${HOST_USER_GID} -m ${USERNAME} &>/dev/null
+    else
+        CONFLICTING_USER_NAME=$(getent passwd ${HOST_USER_UID} | cut -d: -f1)
+        usermod -l ${USERNAME} -u ${HOST_USER_UID} -m -d /home/${USERNAME} ${CONFLICTING_USER_NAME} &>/dev/null
+        mkdir -p /home/${USERNAME}
+        # Wipe files that may create issues for users with large uid numbers.
+        rm -f /var/log/lastlog /var/log/faillog
+    fi
+
+    # Update 'admin' user
+    chown ${USERNAME}:${USERNAME} /home/${USERNAME}
+    echo "${USERNAME} ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/${USERNAME}
+    chmod 0440 /etc/sudoers.d/${USERNAME}
+    adduser ${USERNAME} video >/dev/null
+    adduser ${USERNAME} plugdev >/dev/null
+    adduser ${USERNAME} sudo >/dev/null
+
+    # If jtop present, give the user access
+    if [ -S /run/jtop.sock ]; then
+        JETSON_STATS_GID=$(stat -c %g /run/jtop.sock)
+        addgroup --gid ${JETSON_STATS_GID} jtop >/dev/null
+        adduser ${USERNAME} jtop >/dev/null
+    fi
+
+    # Run all entrypoint additions
+    shopt -s nullglob
+    for addition in /usr/local/bin/scripts/entrypoint_additions/*.sh; do
+        if [[ "${addition}" =~ ".user." ]]; then
+            echo "Running entrypoint extension: ${addition} as user ${USERNAME}"
+            gosu ${USERNAME} ${addition}
+        else
+            echo "Sourcing entrypoint extension: ${addition}"
+            source ${addition}
+        fi
+    done
+
+    # Restart udev daemon
+    service udev restart
+
+    # Optionally switch to non-root user if requested
+    if [ "$1" == "--user" ]; then
+        shift
+        exec gosu ${USERNAME} "$@"
+    else
+        exec "$@"
+    fi
 else
-  CONFLICTING_GROUP_NAME=`getent group ${HOST_USER_GID} | cut -d: -f1`
-  groupmod -o --gid ${HOST_USER_GID} -n ${USERNAME} ${CONFLICTING_GROUP_NAME}
+    echo "Container is already running as non-root user: $(whoami)"
+    exec "$@"
 fi
-
-if [ ! $(getent passwd ${HOST_USER_UID}) ]; then
-  useradd --no-log-init --uid ${HOST_USER_UID} --gid ${HOST_USER_GID} -m ${USERNAME} &>/dev/null
-else
-  CONFLICTING_USER_NAME=`getent passwd ${HOST_USER_UID} | cut -d: -f1`
-  usermod -l ${USERNAME} -u ${HOST_USER_UID} -m -d /home/${USERNAME} ${CONFLICTING_USER_NAME} &>/dev/null
-  mkdir -p /home/${USERNAME}
-  # Wipe files that may create issues for users with large uid numbers.
-  rm -f /var/log/lastlog /var/log/faillog
-fi
-
-# Update 'admin' user
-chown ${USERNAME}:${USERNAME} /home/${USERNAME}
-echo ${USERNAME} ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/${USERNAME}
-chmod 0440 /etc/sudoers.d/${USERNAME}
-adduser ${USERNAME} video >/dev/null
-adduser ${USERNAME} plugdev >/dev/null
-adduser ${USERNAME} sudo  >/dev/null
-
-# If jtop present, give the user access
-if [ -S /run/jtop.sock ]; then
-  JETSON_STATS_GID="$(stat -c %g /run/jtop.sock)"
-  addgroup --gid ${JETSON_STATS_GID} jtop >/dev/null
-  adduser ${USERNAME} jtop >/dev/null
-fi
-
-# Run all entrypoint additions
-shopt -s nullglob
-for addition in /usr/local/bin/scripts/entrypoint_additions/*.sh; do
-  if [[ "${addition}" =~ ".user." ]]; then
-    echo "Running entryrypoint extension: ${addition} as user ${USERNAME}"
-    gosu ${USERNAME} ${addition}
-  else
-    echo "Sourcing entryrypoint extension: ${addition}"
-    source ${addition}
-  fi
-done
-
-echo "source /nano_ws/isaac_ros-dev/install/setup.bash" >> ~/.bashrc
-source /nano_ws/isaac_ros-dev/install/setup.bash
-
-echo "source /nano_ws/isaac_ros-dev/install/local_setup.bash" >> ~/.bashrc
-source /nano_ws/isaac_ros-dev/install/local_setup.bash
-
-# Restart udev daemon
-service udev restart
-
-exec gosu ${USERNAME} "$@"
