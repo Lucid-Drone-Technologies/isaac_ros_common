@@ -16,7 +16,7 @@ source $ROOT/utils/print_color.sh
 # sets a default command to run 'ros2 launch {launch package} {launch file}'
 
 # Example: installs two debians, copies three directories (includes ROS_WS/remaps one), runs package and launch file
-# ./docker_deploy.sh -i "libnvvpi3,tensorrt" -d /workspaces/isaac_ros-dev/tests -d /home/nvidia/scripts:/home/admin/scripts -w /workspaces/isaac_ros-dev/ros_ws -b "aarch64.ros2_humble" -p "isaac_ros_image_proc" -f "isaac_ros_image_flip.launch.py"
+# ./docker_deploy.sh -i "libnvvpi3,tensorrt" -d /nano_ws/isaac_ros-dev/tests -d /home/nvidia/scripts:/home/admin/scripts -w /nano_ws/isaac_ros-dev/ros_ws -b "aarch64.ros2_humble" -p "isaac_ros_image_proc" -f "isaac_ros_image_flip.launch.py"
 
 # Read and parse config file if exists
 #

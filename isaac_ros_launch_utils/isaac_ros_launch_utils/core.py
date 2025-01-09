@@ -711,7 +711,7 @@ def get_nova_robot(path: str = '/etc/nova/manager_selection') -> NovaRobot:
 def get_isaac_ros_ws_path() -> str:
     isaac_ros_ws_path = os.environ.get('ISAAC_ROS_WS')
     if isaac_ros_ws_path is None:
-        isaac_ros_ws_path = "/workspaces/isaac_ros-dev"
+        isaac_ros_ws_path = "/nano_ws/isaac_ros-dev"
         print("Warning: Isaac ROS workspace path requested, but environment variable ISAAC_ROS_WS "
               f"not set. Returning default path {isaac_ros_ws_path}")
     return isaac_ros_ws_path
