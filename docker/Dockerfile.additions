@@ -10,7 +10,7 @@ RUN --mount=type=cache,target=/var/cache/apt \
 # ROS dependencies
 RUN --mount=type=cache,target=/var/cache/apt \
     apt-get update && apt-get install -y \
-    sudo apt-get install ros-humble-behaviortree-cpp-v3
+    ros-humble-behaviortree-cpp-v3
 
 # Isaac ROS dependencies
 RUN --mount=type=cache,target=/var/cache/apt \
@@ -36,7 +36,7 @@ RUN git clone https://github.com/Livox-SDK/Livox-SDK2.git && \
     cd Livox-SDK2 && \
     mkdir build && \
     cd build && \
-    cmake .. && make -j && \
+    cmake .. && make -j4 && \
     make install && \
     echo "/usr/local/lib" > /etc/ld.so.conf.d/livox.conf && \
     ldconfig
