@@ -10,7 +10,9 @@ RUN --mount=type=cache,target=/var/cache/apt \
 # ROS dependencies
 RUN --mount=type=cache,target=/var/cache/apt \
     apt-get update && apt-get install -y \
-    ros-humble-behaviortree-cpp-v3
+    ros-humble-behaviortree-cpp-v3 \
+    ros-humble-pcl-ros
+
 
 # Isaac ROS dependencies
 RUN --mount=type=cache,target=/var/cache/apt \
