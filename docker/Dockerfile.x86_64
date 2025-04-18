@@ -1,1 +1,6 @@
-Dockerfile.base
+ARG BASE_IMAGE=ubuntu:22.04
+FROM $BASE_IMAGE
+
+# https://forums.developer.nvidia.com/t/mpi-compile-include-path-error-with-nvidia-container-runtime/303541/2
+RUN mkdir -p /opt/hpcx/ompi/lib/x86_64-linux-gnu
+RUN ln -s /opt/hpcx/ompi /opt/hpcx/ompi/lib/x86_64-linux-gnu/openmpi
