@@ -52,3 +52,16 @@ RUN git clone -b v2.4.3 https://github.com/eProsima/Micro-XRCE-DDS-Agent.git && 
     make -j4 && \
     make install && \
     ldconfig /usr/local/lib/
+
+# AWS SDK C++ dependencies
+RUN git clone --recurse-submodules https://github.com/aws/aws-sdk-cpp && \
+    cd aws-sdk-cpp && \
+    mkdir sdk_build && \
+    cd sdk_build && \
+    cmake -DCMAKE_BUILD_TYPE=Debug \
+          -DCMAKE_PREFIX_PATH=/usr/local/ \
+          -DCMAKE_INSTALL_PREFIX=/usr/local/ \
+          -DBUILD_ONLY="s3" .. && \
+    make -j4 && \
+    make install && \
+    ldconfig /usr/local/lib/
