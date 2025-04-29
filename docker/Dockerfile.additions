@@ -11,8 +11,14 @@ RUN --mount=type=cache,target=/var/cache/apt \
 RUN --mount=type=cache,target=/var/cache/apt \
     apt-get update && apt-get install -y \
     ros-humble-behaviortree-cpp-v3 \
-    ros-humble-pcl-ros
-
+    ros-humble-pcl-ros \
+    ros-humble-zed-msgs \
+    ros-humble-nmea-msgs \
+    ros-humble-geographic-msgs \
+    ros-humble-point-cloud-transport \
+    ros-humble-robot-localization \
+    ros-humble-point-cloud-transport-plugins \
+    ros-humble-ffmpeg-image-transport
 
 # Isaac ROS dependencies
 RUN --mount=type=cache,target=/var/cache/apt \
