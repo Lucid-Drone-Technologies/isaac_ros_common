@@ -18,7 +18,11 @@ RUN --mount=type=cache,target=/var/cache/apt \
     ros-humble-point-cloud-transport \
     ros-humble-robot-localization \
     ros-humble-point-cloud-transport-plugins \
-    ros-humble-ffmpeg-image-transport
+    ros-humble-ffmpeg-image-transport \
+    ros-humble-imu-tools \
+    ros-humble-cob-msgs \
+    ros-humble-cob-srvs \
+    ros-humble-cob-actions
 
 # Isaac ROS dependencies
 RUN --mount=type=cache,target=/var/cache/apt \
@@ -37,7 +41,9 @@ RUN --mount=type=cache,target=/var/cache/apt \
     ros-humble-isaac-ros-detectnet \
     ros-humble-isaac-ros-peoplesemseg-models-install \
     ros-humble-isaac-ros-peoplenet-models-install \
-    ros-humble-isaac-ros-test-cmake
+    ros-humble-isaac-ros-test-cmake \
+    ros-humble-isaac-ros-stereo-image-proc \
+    ros-humble-isaac-ros-zed
 
 # Livox Lidar dependencies
 RUN git clone https://github.com/Livox-SDK/Livox-SDK2.git && \
@@ -65,9 +71,39 @@ RUN git clone --recurse-submodules https://github.com/aws/aws-sdk-cpp && \
     mkdir sdk_build && \
     cd sdk_build && \
     cmake -DCMAKE_BUILD_TYPE=Debug \
+          -DENABLE_TESTING=OFF \
           -DCMAKE_PREFIX_PATH=/usr/local/ \
           -DCMAKE_INSTALL_PREFIX=/usr/local/ \
           -DBUILD_ONLY="s3" .. && \
     make -j4 && \
     make install && \
     ldconfig /usr/local/lib/
+
+# Install ZED SDK - detect platform and install appropriate version
+RUN CUDA_MAJOR=$(nvcc --version | grep -o -P ' release .{0,4}' | cut -d. -f1 | cut -d ' ' -f3) && \
+    UBUNTU_RELEASE_YEAR=$(grep -o -P 'DISTRIB_RELEASE=.{0,2}' /etc/lsb-release | cut -d= -f2) && \
+    ARCH=$(uname -m) && \
+    if [ "$ARCH" = "aarch64" ]; then \
+        # For Jetson/Tegra platform
+        TEGRA_L4T_RELEASE="36.4" && \
+        wget -q --no-check-certificate -O ZED_SDK_Linux.run https://stereolabs.sfo2.cdn.digitaloceanspaces.com/zedsdk/4.2/ZED_SDK_Tegra_L4T${TEGRA_L4T_RELEASE}_v4.2.2.zstd.run; \
+    else \
+        # For x86 platform
+        wget -q -O ZED_SDK_Linux.run https://download.stereolabs.com/zedsdk/4.2/cu${CUDA_MAJOR}/ubuntu${UBUNTU_RELEASE_YEAR}; \
+    fi && \
+    chmod +x ./ZED_SDK_Linux.run && \
+    ./ZED_SDK_Linux.run silent skip_od_module skip_python skip_drivers && \
+    if [ "$ARCH" = "aarch64" ]; then \
+        ln -sf /usr/lib/aarch64-linux-gnu/tegra/libv4l2.so.0 /usr/lib/aarch64-linux-gnu/libv4l2.so; \
+    else \
+        ln -sf /lib/x86_64-linux-gnu/libusb-1.0.so.0 /usr/lib/x86_64-linux-gnu/libusb-1.0.so; \
+    fi && \
+    rm -rf /usr/local/zed/resources/* && \
+    rm -f ZED_SDK_Linux.run && \
+    # ---- make it usable for everyone ---------------------------------
+    chmod -R a+rX /usr/local/zed
+
+# Set environment variables for ZED SDK
+ENV ZEDROOT=/usr/local/zed
+ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/zed/lib
+ENV CMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH:/usr/local/zed
