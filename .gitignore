@@ -1,2 +1,8 @@
 # Ignore all pycache files
 **/__pycache__/**
+
+# Ignore version_info.yaml files
+isaac_common_py/build/version_info.yaml
+isaac_ros_launch_utils/build/version_info.yaml
+isaac_ros_rosbag_utils/build/version_info.yaml
+isaac_ros_test/build/version_info.yaml
