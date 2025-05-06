@@ -108,3 +108,7 @@ RUN CUDA_MAJOR=$(nvcc --version | grep -o -P ' release .{0,4}' | cut -d. -f1 | c
 ENV ZEDROOT=/usr/local/zed
 ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/zed/lib
 ENV CMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH:/usr/local/zed
+
+# Make sure workspace is sourced if it exists
+RUN echo '[ -f /workspaces/isaac_ros-dev/install/local_setup.bash ] && source /workspaces/isaac_ros-dev/install/local_setup.bash' | tee --append /etc/bash.bashrc
+RUN echo '[ -f /workspaces/isaac_ros-dev/install/etup.bash ] && source /workspaces/isaac_ros-dev/install/setup.bash' | tee --append /etc/bash.bashrc
