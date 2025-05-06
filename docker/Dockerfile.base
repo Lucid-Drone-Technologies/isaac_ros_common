@@ -177,10 +177,17 @@ RUN python3 -m pip install -U \
     scikit-image \
     scikit-learn \
     "setuptools_scm>=6.2" \
-    tqdm \
+    tqdm
+
+# error : "AttributeError: module 'packaging.utils' has no attribute 'InvalidName'"
+# fix : https://forums.developer.nvidia.com/t/nvblox-isaac-ros-setup-on-ros2-with-a-zed-mini-camera/329443/4
+RUN python3 -m pip install scikit-build-core==0.11.1 packaging==24.2 && python3 -m pip install -U --no-build-isolation \
     trimesh \
     "warp-lang>=0.9.0" \
-    "yourdfpy>=0.0.53"
+    "yourdfpy>=0.0.53" \
+    opentelemetry-api==1.28.1 \
+    opentelemetry-sdk==1.28.1 \
+    opentelemetry-exporter-otlp
 
 # Add MQTT binaries and libraries
 RUN --mount=type=cache,target=/var/cache/apt \
