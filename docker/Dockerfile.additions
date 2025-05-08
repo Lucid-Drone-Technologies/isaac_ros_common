@@ -44,7 +44,14 @@ RUN --mount=type=cache,target=/var/cache/apt \
     ros-humble-isaac-ros-peoplenet-models-install \
     ros-humble-isaac-ros-test-cmake \
     ros-humble-isaac-ros-examples \
-    ros-humble-isaac-ros-zed
+    ros-humble-isaac-ros-zed \
+    ros-humble-isaac-ros-nitros-point-cloud-type \
+    ros-humble-gxf-isaac-localization \
+    ros-humble-gxf-isaac-flatscan-localization \
+    ros-humble-gxf-isaac-cuda \
+    ros-humble-gxf-isaac-utils \
+    ros-humble-isaac-ros-nitros-flat-scan-type \
+    ros-humble-isaac-ros-nitros-pose-cov-stamped-type
 
 # Livox Lidar dependencies
 RUN git clone https://github.com/Livox-SDK/Livox-SDK2.git && \
@@ -104,6 +111,10 @@ RUN CUDA_MAJOR=$(nvcc --version | grep -o -P ' release .{0,4}' | cut -d. -f1 | c
     # ---- make it usable for everyone ---------------------------------
     chmod -R a+rX /usr/local/zed
 
+# Add ZED camera permissions script to entrypoint additions
+COPY scripts/zed-permissions.sh /usr/local/bin/scripts/entrypoint_additions/
+RUN chmod +x /usr/local/bin/scripts/entrypoint_additions/zed-permissions.sh
+
 # Set environment variables for ZED SDK
 ENV ZEDROOT=/usr/local/zed
 ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/zed/lib
@@ -112,3 +123,7 @@ ENV CMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH:/usr/local/zed
 # Make sure workspace is sourced if it exists
 RUN echo '[ -f /workspaces/isaac_ros-dev/install/local_setup.bash ] && source /workspaces/isaac_ros-dev/install/local_setup.bash' | tee --append /etc/bash.bashrc
 RUN echo '[ -f /workspaces/isaac_ros-dev/install/etup.bash ] && source /workspaces/isaac_ros-dev/install/setup.bash' | tee --append /etc/bash.bashrc
+
+COPY middleware_profile[s]/cyclonedds.xml /usr/local/share/middleware_profiles/cyclonedds.xml
+ENV RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
+ENV CYCLONEDDS_URI=/usr/local/share/middleware_profiles/cyclonedds.xml
