@@ -123,7 +123,7 @@ ENV CMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH:/usr/local/zed
 
 # Make sure workspace is sourced if it exists
 RUN echo '[ -f /workspaces/isaac_ros-dev/install/local_setup.bash ] && source /workspaces/isaac_ros-dev/install/local_setup.bash' | tee --append /etc/bash.bashrc
-RUN echo '[ -f /workspaces/isaac_ros-dev/install/etup.bash ] && source /workspaces/isaac_ros-dev/install/setup.bash' | tee --append /etc/bash.bashrc
+RUN echo '[ -f /workspaces/isaac_ros-dev/install/setup.bash ] && source /workspaces/isaac_ros-dev/install/setup.bash' | tee --append /etc/bash.bashrc
 
 COPY middleware_profile[s]/cyclonedds.xml /usr/local/share/middleware_profiles/cyclonedds.xml
 ENV RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
