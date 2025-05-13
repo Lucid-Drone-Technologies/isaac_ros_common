@@ -51,7 +51,8 @@ RUN --mount=type=cache,target=/var/cache/apt \
     ros-humble-gxf-isaac-cuda \
     ros-humble-gxf-isaac-utils \
     ros-humble-isaac-ros-nitros-flat-scan-type \
-    ros-humble-isaac-ros-nitros-pose-cov-stamped-type
+    ros-humble-isaac-ros-nitros-pose-cov-stamped-type \
+    ros-humble-gxf-isaac-ros-cuda
 
 # Livox Lidar dependencies
 RUN git clone https://github.com/Livox-SDK/Livox-SDK2.git && \
@@ -127,3 +128,4 @@ RUN echo '[ -f /workspaces/isaac_ros-dev/install/etup.bash ] && source /workspac
 COPY middleware_profile[s]/cyclonedds.xml /usr/local/share/middleware_profiles/cyclonedds.xml
 ENV RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
 ENV CYCLONEDDS_URI=/usr/local/share/middleware_profiles/cyclonedds.xml
+
