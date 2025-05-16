@@ -23,7 +23,8 @@ RUN --mount=type=cache,target=/var/cache/apt \
     ros-humble-imu-tools \
     ros-humble-cob-msgs \
     ros-humble-cob-srvs \
-    ros-humble-cob-actions
+    ros-humble-cob-actions \
+    ros-humble-twist-mux
 
 # Isaac ROS dependencies
 RUN --mount=type=cache,target=/var/cache/apt \
