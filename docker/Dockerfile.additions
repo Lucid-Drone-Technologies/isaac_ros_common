@@ -6,7 +6,7 @@ FROM $BASE_IMAGE
 RUN --mount=type=cache,target=/var/cache/apt \
     apt-get update && apt-get install -y \
     libzmq3-dev \
-    libqt5core5a
+    libqt5core5a 
 
 # ROS dependencies
 RUN --mount=type=cache,target=/var/cache/apt \
@@ -24,7 +24,8 @@ RUN --mount=type=cache,target=/var/cache/apt \
     ros-humble-cob-msgs \
     ros-humble-cob-srvs \
     ros-humble-cob-actions \
-    ros-humble-twist-mux
+    ros-humble-twist-mux \
+    ros-humble-pointcloud-to-laserscan
 
 # Isaac ROS dependencies
 RUN --mount=type=cache,target=/var/cache/apt \
@@ -102,7 +103,7 @@ RUN CUDA_MAJOR=$(nvcc --version | grep -o -P ' release .{0,4}' | cut -d. -f1 | c
         wget -q -O ZED_SDK_Linux.run https://download.stereolabs.com/zedsdk/4.2/cu${CUDA_MAJOR}/ubuntu${UBUNTU_RELEASE_YEAR}; \
     fi && \
     chmod +x ./ZED_SDK_Linux.run && \
-    ./ZED_SDK_Linux.run silent skip_od_module skip_python skip_drivers && \
+    ./ZED_SDK_Linux.run silent skip_od_module skip_python && \
     if [ "$ARCH" = "aarch64" ]; then \
         ln -sf /usr/lib/aarch64-linux-gnu/tegra/libv4l2.so.0 /usr/lib/aarch64-linux-gnu/libv4l2.so; \
     else \
