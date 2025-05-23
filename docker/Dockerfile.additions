@@ -25,7 +25,10 @@ RUN --mount=type=cache,target=/var/cache/apt \
     ros-humble-cob-srvs \
     ros-humble-cob-actions \
     ros-humble-twist-mux \
-    ros-humble-pointcloud-to-laserscan
+    ros-humble-pointcloud-to-laserscan \
+    ros-humble-robot-state-publisher \
+    ros-humble-joint-state-publisher \
+    ros-humble-joint-state-publisher-gui
 
 # Isaac ROS dependencies
 RUN --mount=type=cache,target=/var/cache/apt \
