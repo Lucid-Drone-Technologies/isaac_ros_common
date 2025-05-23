@@ -6,7 +6,8 @@ FROM $BASE_IMAGE
 RUN --mount=type=cache,target=/var/cache/apt \
     apt-get update && apt-get install -y \
     libzmq3-dev \
-    libqt5core5a 
+    libqt5core5a \
+    nano
 
 # ROS dependencies
 RUN --mount=type=cache,target=/var/cache/apt \
